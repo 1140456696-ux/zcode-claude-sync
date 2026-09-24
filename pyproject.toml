@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zcode-claude-sync"
+version = "0.1.0"
+description = "双向迁移 ZCode 与 Claude Code 的会话对话（SQLite <-> JSONL）"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "ghost"}]
+keywords = ["zcode", "claude-code", "migration", "session", "sqlite", "jsonl"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+]
+dependencies = []
+
+[project.scripts]
+zcsync = "zcsync.cli:main"
+
+[tool.setuptools]
+packages = ["zcsync"]
