@@ -96,23 +96,5 @@ python run.py c2z --dry-run
 python run.py z2c --all --no-input
 ```
 
-## 发布到 GitHub
 
-```bash
-# 项目自带 .gitignore（已排除 *.sqlite / *.jsonl / .venv 等个人数据）
-cd zcode-claude-sync
-git init
-git add .
-git commit -m "init: ZCode <-> Claude Code 会话双向同步"
 
-# 关联远程仓库并推送
-git remote add origin https://github.com/<你的用户名>/zcode-claude-sync.git
-git branch -M main
-git push -u origin main
-```
-
-> 提示：若仓库由 Claude Code 创建，可跳过 `git init`，直接 `git commit`。
-
-## License
-
-MIT
