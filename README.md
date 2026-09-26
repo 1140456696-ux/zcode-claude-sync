@@ -13,7 +13,7 @@
 
 ## 特性
 
-- **双向**：ZCode → Claude Code（`z2c`）与 Claude Code → ZCode（`c2z`）
+- **双向**：ZCode → Claude Code与 Claude Code → ZCode
 - **零写死**：默认展开 `~`，所有路径可通过环境变量覆盖（见下）
 - **交互式目录选择**：运行时列出所有工作目录，支持按编号 / 关键字 / 路径筛选
 - **工具调用全保留**：`Bash` / `Read` / `Write` 等工具调用和结果完整迁移
