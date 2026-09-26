@@ -1,28 +1,32 @@
 # zcode-claude-sync
 
-双向同步 **ZCode** 与 **Claude Code** 的会话对话。
+双向同步 **ZCode** 与 **Claude Code** 会话内容。
 
-- `ZCode` 的会话存在全局 SQLite（`~/.zcode/cli/db/db.sqlite`，`message` + `part` 两张表）
-- `Claude Code` 的会话存在 `~/.claude/projects/<slug>/<uuid>.jsonl`（JSONL 行式）
+![Platform](https://img.shields.io/badge/Platform-Windows_10%2F11-0078D4)
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB)
+![License](https://img.shields.io/badge/License-GPL--2.0-blue)
 
-本项目在两者之间**双向**转换：把 ZCode 里聊过的对话搬到 Claude Code 继续用（反之亦然），上下文字段（角色、时间、工作目录、工具调用）完整保留。
+- `ZCode` 会话保存在全局 SQLite：`~/.zcode/cli/db/db.sqlite`（`message` + `part` 两张表）
+- `Claude Code` 会话保存在 `~/.claude/projects/<slug>/<uuid>.jsonl`（JSONL 行式）
+
+本项目实现两者之间的**双向迁移**：把 ZCode 中的对话搬到 Claude Code 继续使用，反之亦然；角色、时间、工作目录、工具调用等上下文字段都会完整保留。
 
 ## 特性
 
 - **双向**：ZCode → Claude Code（`z2c`）与 Claude Code → ZCode（`c2z`）
-- **零写死**：所有路径默认用 `~` 展开，可用环境变量覆盖（见下）
-- **交互式目录选择**：运行时列出所有工作目录，让你选要迁移哪个文件夹/哪些会话
+- **零写死**：默认展开 `~`，所有路径可通过环境变量覆盖（见下）
+- **交互式目录选择**：运行时列出所有工作目录，支持按编号 / 关键字 / 路径筛选
 - **工具调用全保留**：`Bash` / `Read` / `Write` 等工具调用和结果完整迁移
-- **幂等 & 安全**：目标会话已存在时覆盖前确认；`--dry-run` 只看不动；只读源库、写目标
+- **幂等 & 安全**：目标会话已存在时先确认；`--dry-run` 仅预览不写入；只读源库、写目标
 - **纯标准库**，零第三方依赖，Python 3.9+
 
 ## 安装
 
 ```bash
-# 方式一：源码直接跑（无需安装）
+# 方式一：直接运行源码（无需安装）
 python run.py z2c
 
-# 方式二：装成命令
+# 方式二：安装为命令
 pip install .
 zcsync z2c
 ```
@@ -36,12 +40,12 @@ python run.py
 ```
 
 启动后按引导一步步操作：
-1. **选方向** —— ZCode→Claude 还是 Claude→ZCode
+1. **选方向** —— ZCode → Claude 还是 Claude → ZCode
 2. **选目录** —— 列出所有工作目录，输入编号 / 关键字 / 路径
-3. **选会话** —— 列出该目录的会话，输入编号（0=全选）
+3. **选会话** —— 列出该目录的会话，输入编号（`0` = 全选）
 4. **开始转换** —— 每个会话完成后打印结果与 resume ID
 
-> 支持多选：目录可逗号分隔多个编号，会话同理。随时输入 `q` 退出。
+> 支持多选：目录可用逗号分隔多个编号，会话同理。随时输入 `q` 退出。
 
 ### 进阶参数（可选）
 
@@ -76,7 +80,7 @@ python run.py --dry-run
 ## 兼容性
 
 - 已在 Claude Code `2.1.276` 与对应 ZCode 版本实测（Windows 11）
-- 转换后的 Claude 会话可用 `claude --resume <uuid>` 直接恢复，上下文完整
+- 转换后的 Claude 会话可用 `claude --resume <uuid>` 直接恢复，保留完整上下文
 
 ## 安全
 
@@ -88,10 +92,10 @@ python run.py --dry-run
 ## 常见用法补充
 
 ```bash
-# 只预览会迁移哪些会话，不写入（安全）
+# 只预览将迁移哪些会话，不写入（安全）
 python run.py z2c --dry-run
 python run.py c2z --dry-run
 
-# 非交互：直接迁完整路径下所有目录
+# 非交互：直接迁移完整路径下所有目录
 python run.py z2c --all --no-input
 ```
